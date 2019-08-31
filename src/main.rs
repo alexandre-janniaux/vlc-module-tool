@@ -26,4 +26,19 @@ fn main()
 
     let plugin = DynamicLibrary::open(Some(filepath))
         .expect(&format!("Could not open library {}", filename));
+
+    /* In VLC 3, these symbols were:
+     *  - vlc_entry_license__3_0_0f
+     *  - vlc_entry_copyright__3_0_0f
+     *  - vlc_entry__3_0_0f  */
+    unsafe {
+        let api_version = plugin.symbol::<vlc::MetaExportFunc>("vlc_entry_api_version")
+            .unwrap();
+        let entry       = plugin.symbol::<vlc::EntryFunc>("vlc_entry")
+            .unwrap();
+        let copyright   = plugin.symbol::<vlc::MetaExportFunc>("vlc_entry_copyright")
+            .unwrap();
+        let license     = plugin.symbol::<vlc::MetaExportFunc>("vlc_entry_license")
+            .unwrap();
+    }
 }
