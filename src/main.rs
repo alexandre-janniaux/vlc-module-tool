@@ -99,7 +99,7 @@ mod vlc
         ModuleCallbackOpen,
         ModuleCallbackClose,
         ModuleNoUnload,
-        ModuleName,
+        ModuleName(String),
         ModuleShortname,
         ModuleDescription,
         ModuleHelp,
@@ -124,11 +124,11 @@ mod vlc
     }
 
     #[no_mangle]
-    extern "C" fn plugin_describe_cb(
+    unsafe extern "C" fn plugin_describe_cb(
         context: *mut c_void,
         target: *mut c_void,
         prop_id: c_int,
-        args: VaList
+        mut args: VaList
     )  -> c_int
     {
         let kind = match prop_id
@@ -141,7 +141,11 @@ mod vlc
             VLC_MODULE_CB_OPEN      => Some(PluginProperty::ModuleCallbackOpen),
             VLC_MODULE_CB_CLOSE     => Some(PluginProperty::ModuleCallbackClose),
             VLC_MODULE_NO_UNLOAD    => Some(PluginProperty::ModuleNoUnload),
-            VLC_MODULE_NAME         => Some(PluginProperty::ModuleName),
+            VLC_MODULE_NAME         => {
+                let name = CStr::from_ptr(args.arg::<*const c_char>());
+                //    .to_string_lossy()
+                Some(PluginProperty::ModuleName("test".into()))
+            },
             VLC_MODULE_SHORTNAME    => Some(PluginProperty::ModuleShortname),
             VLC_MODULE_DESCRIPTION  => Some(PluginProperty::ModuleDescription),
             VLC_MODULE_HELP         => Some(PluginProperty::ModuleHelp),
