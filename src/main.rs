@@ -133,33 +133,40 @@ mod vlc
     {
         let kind = match prop_id
         {
-            VLC_MODULE_CREATE       => "VLC_MODULE_CREATE",
-            VLC_CONFIG_CREATE       => "VLC_CONFIG_CREATE",
-            VLC_MODULE_SHORTCUT     => "VLC_MODULE_SHORTCUT",
-            VLC_MODULE_CAPABILITY   => "VLC_MODULE_CAPABILITY",
-            VLC_MODULE_SCORE        => "VLC_MODULE_SCORE",
-            VLC_MODULE_CB_OPEN      => "VLC_MODULE_CB_OPEN",
-            VLC_MODULE_CB_CLOSE     => "VLC_MODULE_CB_CLOSE",
-            VLC_MODULE_NO_UNLOAD    => "VLC_MODULE_NO_UNLOAD",
-            VLC_MODULE_NAME         => "VLC_MODULE_NAME",
-            VLC_MODULE_SHORTNAME    => "VLC_MODULE_SHORTNAME",
-            VLC_MODULE_DESCRIPTION  => "VLC_MODULE_DESCRIPTION",
-            VLC_MODULE_HELP         => "VLC_MODULE_HELP",
-            VLC_MODULE_TEXTDOMAIN   => "VLC_MODULE_TEXTDOMAIN",
-            VLC_CONFIG_NAME         => "VLC_CONFIG_NAME",
-            VLC_CONFIG_VALUE        => "VLC_CONFIG_VALUE",
-            VLC_CONFIG_RANGE        => "VLC_CONFIG_RANGE",
-            VLC_CONFIG_VOLATILE     => "VLC_CONFIG_VOLATILE",
-            VLC_CONFIG_REMOVED      => "VLC_CONFIG_REMOVED",
-            VLC_CONFIG_CAPABILITY   => "VLC_CONFIG_CAPABILITY",
-            VLC_CONFIG_SHORTCUT     => "VLC_CONFIG_SHORTCUT",
-            VLC_CONFIG_SAFE         => "VLC_CONFIG_SAFE",
-            VLC_CONFIG_DESC         => "VLC_CONFIG_DESC",
-            VLC_CONFIG_LIST         => "VLC_CONFIG_LIST",
-            _ => "Unknown module property",
+            VLC_MODULE_CREATE       => Some(PluginProperty::ModuleCreate),
+            VLC_CONFIG_CREATE       => Some(PluginProperty::ConfigCreate),
+            VLC_MODULE_SHORTCUT     => Some(PluginProperty::ModuleShortcut),
+            VLC_MODULE_CAPABILITY   => Some(PluginProperty::ModuleCapability),
+            VLC_MODULE_SCORE        => Some(PluginProperty::ModuleScore),
+            VLC_MODULE_CB_OPEN      => Some(PluginProperty::ModuleCallbackOpen),
+            VLC_MODULE_CB_CLOSE     => Some(PluginProperty::ModuleCallbackClose),
+            VLC_MODULE_NO_UNLOAD    => Some(PluginProperty::ModuleNoUnload),
+            VLC_MODULE_NAME         => Some(PluginProperty::ModuleName),
+            VLC_MODULE_SHORTNAME    => Some(PluginProperty::ModuleShortname),
+            VLC_MODULE_DESCRIPTION  => Some(PluginProperty::ModuleDescription),
+            VLC_MODULE_HELP         => Some(PluginProperty::ModuleHelp),
+            VLC_MODULE_TEXTDOMAIN   => Some(PluginProperty::ModuleTextDomain),
+            VLC_CONFIG_NAME         => Some(PluginProperty::ConfigName),
+            VLC_CONFIG_VALUE        => Some(PluginProperty::ConfigValue),
+            VLC_CONFIG_RANGE        => Some(PluginProperty::ConfigRange),
+            VLC_CONFIG_VOLATILE     => Some(PluginProperty::ConfigVolatile),
+            VLC_CONFIG_REMOVED      => Some(PluginProperty::ConfigRemoved),
+            VLC_CONFIG_CAPABILITY   => Some(PluginProperty::ConfigCapability),
+            VLC_CONFIG_SHORTCUT     => Some(PluginProperty::ConfigShortcut),
+            VLC_CONFIG_SAFE         => Some(PluginProperty::ConfigSafe),
+            VLC_CONFIG_DESC         => Some(PluginProperty::ConfigDesc),
+            VLC_CONFIG_LIST         => Some(PluginProperty::ConfigList),
+            _ => None,
         };
 
-        println!("Got property \"{}\"", kind);
+        if let Some(property) = kind
+        {
+            println!(" + property \"{:?}\"", property);
+        }
+        else
+        {
+            println!(" x unknown property");
+        }
 
         VLC_SUCCESS
     }
