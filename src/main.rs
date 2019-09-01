@@ -87,6 +87,42 @@ mod vlc
     const VLC_CONFIG_LIST                   : c_int = 0x100F    ;
     const VLC_CONFIG_LIST_CB_OBSOLETE       : c_int = 0x1010    ;
 
+    #[derive(Debug)]
+    enum PluginProperty
+    {
+        ModuleCreate,
+        ConfigCreate,
+        ModuleCpuRequirement,
+        ModuleShortcut,
+        ModuleCapability,
+        ModuleScore,
+        ModuleCallbackOpen,
+        ModuleCallbackClose,
+        ModuleNoUnload,
+        ModuleName,
+        ModuleShortname,
+        ModuleDescription,
+        ModuleHelp,
+        ModuleTextDomain,
+        ConfigName,
+        ConfigValue,
+        ConfigRange,
+        ConfigAdvancedReserved,
+        ConfigVolatile,
+        ConfigPersistentObsolete,
+        ConfigPrivate,
+        ConfigRemoved,
+        ConfigCapability,
+        ConfigShortcut,
+        ConfigOldNameObsoleted,
+        ConfigSafe,
+        ConfigDesc,
+        ConfigListObsolete,
+        ConfigAddActionObsolete,
+        ConfigList,
+        ConfigListCbObsolete,
+    }
+
     #[no_mangle]
     extern "C" fn plugin_describe_cb(
         context: *mut c_void,
