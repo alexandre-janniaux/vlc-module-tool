@@ -60,7 +60,7 @@ mod vlc
     const VLC_MODULE_CPU_REQUIREMENT        : c_int = 0x100     ;
     const VLC_MODULE_SHORTCUT               : c_int = 0x101     ;
     const VLC_MODULE_CAPABILITY             : c_int = 0x102     ;
-    const VLC_MODULE_SCODE                  : c_int = 0x103     ;
+    const VLC_MODULE_SCORE                  : c_int = 0x103     ;
     const VLC_MODULE_CB_OPEN                : c_int = 0x104     ;
     const VLC_MODULE_CB_CLOSE               : c_int = 0x105     ;
     const VLC_MODULE_NO_UNLOAD              : c_int = 0x106     ;
