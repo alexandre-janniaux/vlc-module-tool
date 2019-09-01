@@ -44,6 +44,16 @@ mod vlc
                     .into()
             }
         }
+
+        pub fn visit(&self)
+        {
+            unsafe
+            {
+                (self.sym_entry)(plugin_describe_cb, std::ptr::null_mut());
+            }
+        }
+    }
+
     const VLC_SUCCESS                       : c_int = 0x0       ;
     const VLC_MODULE_CREATE                 : c_int = 0x0       ;
     const VLC_CONFIG_CREATE                 : c_int = 0x1       ;
@@ -117,7 +127,6 @@ mod vlc
 
         VLC_SUCCESS
     }
-
 }
 
 
@@ -139,6 +148,7 @@ fn main()
     let mut plugin_interface = unsafe { vlc::PluginEntry::load(&plugin) }.unwrap();
 
     let api_version = plugin_interface.api_version();
-
     println!("LibVLCCore Version: {}", api_version);
+
+    plugin_interface.visit();
 }
