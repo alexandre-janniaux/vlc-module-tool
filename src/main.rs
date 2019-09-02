@@ -10,7 +10,7 @@ mod vlc
     use std::ffi::{VaList, CStr};
     use libc::{c_void, c_int, c_char};
     use dlopen::symbor::{Symbol, SymBorApi};
-    pub type SetFunc   = unsafe extern "C" fn (*mut c_void, *mut c_void, c_int, VaList) -> c_int;
+    pub type SetFunc   = unsafe extern "C" fn (*mut c_void, *mut c_void, c_int, ...) -> c_int;
     pub type EntryFunc = unsafe extern "C" fn (SetFunc, *mut c_void) -> c_int;
     pub type MetaExportFunc = unsafe extern "C" fn () -> *const c_char;
 
@@ -128,7 +128,7 @@ mod vlc
         context: *mut c_void,
         target: *mut c_void,
         prop_id: c_int,
-        mut args: VaList
+        mut args: ...
     )  -> c_int
     {
         let kind = match prop_id
