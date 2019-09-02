@@ -142,9 +142,9 @@ mod vlc
             VLC_MODULE_CB_CLOSE     => Some(PluginProperty::ModuleCallbackClose),
             VLC_MODULE_NO_UNLOAD    => Some(PluginProperty::ModuleNoUnload),
             VLC_MODULE_NAME         => {
-                let name = CStr::from_ptr(args.arg::<*const c_char>());
-                //    .to_string_lossy()
-                Some(PluginProperty::ModuleName("test".into()))
+                let name = CStr::from_ptr(args.arg::<*const c_char>())
+                    .to_string_lossy();
+                Some(PluginProperty::ModuleName(name.into()))
             },
             VLC_MODULE_SHORTNAME    => Some(PluginProperty::ModuleShortname),
             VLC_MODULE_DESCRIPTION  => Some(PluginProperty::ModuleDescription),
