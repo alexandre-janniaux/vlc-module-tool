@@ -100,7 +100,7 @@ mod vlc
         ModuleCallbackClose,
         ModuleNoUnload,
         ModuleName(String),
-        ModuleShortname,
+        ModuleShortname(String),
         ModuleDescription,
         ModuleHelp,
         ModuleTextDomain,
@@ -164,7 +164,12 @@ mod vlc
                     .to_string_lossy();
                 Some(PluginProperty::ModuleName(name.into()))
             },
-            VLC_MODULE_SHORTNAME    => Some(PluginProperty::ModuleShortname),
+            VLC_MODULE_SHORTNAME    => {
+                let shortname = CStr::from_ptr(args.arg::<*const c_char>())
+                    .to_string_lossy()
+                    .into();
+                Some(PluginProperty::ModuleShortname(shortname))
+            },
             VLC_MODULE_DESCRIPTION  => Some(PluginProperty::ModuleDescription),
             VLC_MODULE_HELP         => Some(PluginProperty::ModuleHelp),
             VLC_MODULE_TEXTDOMAIN   => Some(PluginProperty::ModuleTextDomain),
