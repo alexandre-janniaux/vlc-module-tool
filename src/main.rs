@@ -101,7 +101,7 @@ mod vlc
         ModuleNoUnload,
         ModuleName(String),
         ModuleShortname(String),
-        ModuleDescription,
+        ModuleDescription(String),
         ModuleHelp,
         ModuleTextDomain,
         ConfigName,
@@ -170,7 +170,12 @@ mod vlc
                     .into();
                 Some(PluginProperty::ModuleShortname(shortname))
             },
-            VLC_MODULE_DESCRIPTION  => Some(PluginProperty::ModuleDescription),
+            VLC_MODULE_DESCRIPTION  => {
+                let description = CStr::from_ptr(args.arg::<*const c_char>())
+                    .to_string_lossy()
+                    .into();
+                Some(PluginProperty::ModuleDescription(description))
+            },
             VLC_MODULE_HELP         => Some(PluginProperty::ModuleHelp),
             VLC_MODULE_TEXTDOMAIN   => Some(PluginProperty::ModuleTextDomain),
             VLC_CONFIG_NAME         => Some(PluginProperty::ConfigName),
