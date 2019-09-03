@@ -112,7 +112,7 @@ mod vlc
         ConfigPersistentObsolete,
         ConfigPrivate,
         ConfigRemoved,
-        ConfigCapability,
+        ConfigCapability(String),
         ConfigShortcut,
         ConfigOldNameObsoleted,
         ConfigSafe,
@@ -193,7 +193,12 @@ mod vlc
             VLC_CONFIG_RANGE        => Some(PluginProperty::ConfigRange),
             VLC_CONFIG_VOLATILE     => Some(PluginProperty::ConfigVolatile),
             VLC_CONFIG_REMOVED      => Some(PluginProperty::ConfigRemoved),
-            VLC_CONFIG_CAPABILITY   => Some(PluginProperty::ConfigCapability),
+            VLC_CONFIG_CAPABILITY   => {
+                let capability = CStr::from_ptr(args.arg::<*const c_char>())
+                    .to_string_lossy()
+                    .into();
+                Some(PluginProperty::ConfigCapability(capability))
+            },
             VLC_CONFIG_SHORTCUT     => Some(PluginProperty::ConfigShortcut),
             VLC_CONFIG_SAFE         => Some(PluginProperty::ConfigSafe),
             VLC_CONFIG_DESC         => Some(PluginProperty::ConfigDesc),
