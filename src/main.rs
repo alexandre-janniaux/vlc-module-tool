@@ -8,7 +8,7 @@ use std::path::Path;
 mod vlc
 {
     use std::ffi::{VaList, CStr};
-    use libc::{c_void, c_int, c_char};
+    use libc::{c_void, c_uint, c_int, c_char};
     use dlopen::symbor::{Symbol, SymBorApi};
     pub type SetFunc   = unsafe extern "C" fn (*mut c_void, *mut c_void, c_int, ...) -> c_int;
     pub type EntryFunc = unsafe extern "C" fn (SetFunc, *mut c_void) -> c_int;
@@ -93,7 +93,7 @@ mod vlc
         ModuleCreate,
         ConfigCreate,
         ModuleCpuRequirement,
-        ModuleShortcut,
+        ModuleShortcut(Vec<String>),
         ModuleCapability,
         ModuleScore,
         ModuleCallbackOpen,
@@ -135,7 +135,17 @@ mod vlc
         {
             VLC_MODULE_CREATE       => Some(PluginProperty::ModuleCreate),
             VLC_CONFIG_CREATE       => Some(PluginProperty::ConfigCreate),
-            VLC_MODULE_SHORTCUT     => Some(PluginProperty::ModuleShortcut),
+            VLC_MODULE_SHORTCUT     => {
+                let shortcut_count = args.arg::<c_uint>();
+                let shortcuts = std::slice::from_raw_parts(
+                    args.arg::<*const *const c_char>(),
+                    shortcut_count as usize)
+                    .iter()
+                    .map(|&shortcut| CStr::from_ptr(shortcut).to_string_lossy().into())
+                    .collect();
+
+                Some(PluginProperty::ModuleShortcut(shortcuts))
+            },
             VLC_MODULE_CAPABILITY   => Some(PluginProperty::ModuleCapability),
             VLC_MODULE_SCORE        => Some(PluginProperty::ModuleScore),
             VLC_MODULE_CB_OPEN      => Some(PluginProperty::ModuleCallbackOpen),
