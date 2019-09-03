@@ -117,7 +117,7 @@ mod vlc
     enum PluginProperty
     {
         ModuleCreate,
-        ConfigCreate,
+        ConfigCreate(ConfigItemKind),
         ModuleCpuRequirement,
         ModuleShortcut(Vec<String>),
         ModuleCapability(String),
@@ -160,7 +160,19 @@ mod vlc
         let kind = match prop_id
         {
             VLC_MODULE_CREATE       => Some(PluginProperty::ModuleCreate),
-            VLC_CONFIG_CREATE       => Some(PluginProperty::ConfigCreate),
+            VLC_CONFIG_CREATE       => {
+                let id_kind = args.arg::<c_int>();
+                let kind = match id_kind & !0xF
+                {
+                    VLC_CONFIG_ITEM_FLOAT   => Some(ConfigItemKind::Float),
+                    VLC_CONFIG_ITEM_INTEGER => Some(ConfigItemKind::Integer),
+                    VLC_CONFIG_ITEM_BOOL    => Some(ConfigItemKind::Bool),
+                    VLC_CONFIG_ITEM_STRING  => Some(ConfigItemKind::String),
+                    _ => None
+                };
+
+                kind.and_then(|kind| Some(PluginProperty::ConfigCreate(kind)))
+            },
             VLC_MODULE_SHORTCUT     => {
                 let shortcut_count = args.arg::<c_uint>();
                 let shortcuts = std::slice::from_raw_parts(
