@@ -104,7 +104,7 @@ mod vlc
         ModuleDescription(String),
         ModuleHelp(String),
         ModuleTextDomain,
-        ConfigName,
+        ConfigName(String),
         ConfigValue,
         ConfigRange,
         ConfigAdvancedReserved,
@@ -183,7 +183,12 @@ mod vlc
                 Some(PluginProperty::ModuleHelp(help))
             },
             VLC_MODULE_TEXTDOMAIN   => Some(PluginProperty::ModuleTextDomain),
-            VLC_CONFIG_NAME         => Some(PluginProperty::ConfigName),
+            VLC_CONFIG_NAME         => {
+                let name = CStr::from_ptr(args.arg::<*const c_char>())
+                    .to_string_lossy()
+                    .into();
+                Some(PluginProperty::ConfigName(name))
+            },
             VLC_CONFIG_VALUE        => Some(PluginProperty::ConfigValue),
             VLC_CONFIG_RANGE        => Some(PluginProperty::ConfigRange),
             VLC_CONFIG_VOLATILE     => Some(PluginProperty::ConfigVolatile),
