@@ -95,7 +95,7 @@ mod vlc
         ModuleCpuRequirement,
         ModuleShortcut(Vec<String>),
         ModuleCapability(String),
-        ModuleScore,
+        ModuleScore(i32),
         ModuleCallbackOpen,
         ModuleCallbackClose,
         ModuleNoUnload,
@@ -152,7 +152,10 @@ mod vlc
                     .into();
                 Some(PluginProperty::ModuleCapability(capability))
             }
-            VLC_MODULE_SCORE        => Some(PluginProperty::ModuleScore),
+            VLC_MODULE_SCORE        => {
+                let score = args.arg::<c_int>() as i32;
+                Some(PluginProperty::ModuleScore(score))
+            },
             VLC_MODULE_CB_OPEN      => Some(PluginProperty::ModuleCallbackOpen),
             VLC_MODULE_CB_CLOSE     => Some(PluginProperty::ModuleCallbackClose),
             VLC_MODULE_NO_UNLOAD    => Some(PluginProperty::ModuleNoUnload),
