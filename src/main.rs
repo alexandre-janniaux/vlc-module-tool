@@ -102,7 +102,7 @@ mod vlc
         ModuleName(String),
         ModuleShortname(String),
         ModuleDescription(String),
-        ModuleHelp,
+        ModuleHelp(String),
         ModuleTextDomain,
         ConfigName,
         ConfigValue,
@@ -176,7 +176,12 @@ mod vlc
                     .into();
                 Some(PluginProperty::ModuleDescription(description))
             },
-            VLC_MODULE_HELP         => Some(PluginProperty::ModuleHelp),
+            VLC_MODULE_HELP         => {
+                let help = CStr::from_ptr(args.arg::<*const c_char>())
+                    .to_string_lossy()
+                    .into();
+                Some(PluginProperty::ModuleHelp(help))
+            },
             VLC_MODULE_TEXTDOMAIN   => Some(PluginProperty::ModuleTextDomain),
             VLC_CONFIG_NAME         => Some(PluginProperty::ConfigName),
             VLC_CONFIG_VALUE        => Some(PluginProperty::ConfigValue),
