@@ -87,6 +87,32 @@ mod vlc
     const VLC_CONFIG_LIST                   : c_int = 0x100F    ;
     const VLC_CONFIG_LIST_CB_OBSOLETE       : c_int = 0x1010    ;
 
+    const VLC_CONFIG_ITEM_FLOAT             : c_int = 0x20      ;
+    const VLC_CONFIG_ITEM_INTEGER           : c_int = 0x40      ;
+    const VLC_CONFIG_ITEM_RGB               : c_int = 0x41      ;
+    const VLC_CONFIG_ITEM_BOOL              : c_int = 0x60      ;
+    const VLC_CONFIG_ITEM_STRING            : c_int = 0x80      ;
+    const VLC_CONFIG_ITEM_PASSWORD          : c_int = 0x81      ;
+    const VLC_CONFIG_ITEM_KEY               : c_int = 0x82      ;
+    const VLC_CONFIG_ITEM_MODULE            : c_int = 0x84      ;
+    const VLC_CONFIG_ITEM_MODULE_CAT        : c_int = 0x85      ;
+    const VLC_CONFIG_ITEM_MODULE_LIST       : c_int = 0x86      ;
+    const VLC_CONFIG_ITEM_MODULE_LIST_CAT   : c_int = 0x87      ;
+    const VLC_CONFIG_ITEM_LOADFILE          : c_int = 0x8C      ;
+    const VLC_CONFIG_ITEM_SAVEFILE          : c_int = 0x8D      ;
+    const VLC_CONFIG_ITEM_DIRECTORY         : c_int = 0x8E      ;
+    const VLC_CONFIG_ITEM_FONT              : c_int = 0x8F      ;
+    /*...*/
+
+    #[derive(Debug)]
+    enum ConfigItemKind
+    {
+        Float,
+        Integer,
+        Bool,
+        String,
+    }
+
     #[derive(Debug)]
     enum PluginProperty
     {
