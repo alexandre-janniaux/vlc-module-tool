@@ -94,7 +94,7 @@ mod vlc
         ConfigCreate,
         ModuleCpuRequirement,
         ModuleShortcut(Vec<String>),
-        ModuleCapability,
+        ModuleCapability(String),
         ModuleScore,
         ModuleCallbackOpen,
         ModuleCallbackClose,
@@ -146,7 +146,12 @@ mod vlc
 
                 Some(PluginProperty::ModuleShortcut(shortcuts))
             },
-            VLC_MODULE_CAPABILITY   => Some(PluginProperty::ModuleCapability),
+            VLC_MODULE_CAPABILITY   => {
+                let capability = CStr::from_ptr(args.arg::<*const c_char>())
+                    .to_string_lossy()
+                    .into();
+                Some(PluginProperty::ModuleCapability(capability))
+            }
             VLC_MODULE_SCORE        => Some(PluginProperty::ModuleScore),
             VLC_MODULE_CB_OPEN      => Some(PluginProperty::ModuleCallbackOpen),
             VLC_MODULE_CB_CLOSE     => Some(PluginProperty::ModuleCallbackClose),
